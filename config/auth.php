@@ -40,10 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        //'api' => [
-           // 'driver' => 'passport',
-          //  'provider' => 'admin_users', // Use the admin_users' provider for API authentication
-        //]
+        'api' => [
+           'driver' => 'passport',
+           'provider' => 'users', // Use the admin_users' provider for API authentication
+        ]
     ],
 
     /*
