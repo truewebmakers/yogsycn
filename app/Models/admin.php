@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class user_otp extends Model
+class admin extends Model
 {
     use HasFactory;
     protected $primaryKey = '_id';
@@ -14,8 +14,7 @@ class user_otp extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
-        'otp',
-        'phoneno',
-        'expire_time',
+        'username',
+        'password'
     ];
 }
