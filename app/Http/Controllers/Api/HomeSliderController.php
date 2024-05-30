@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\home_slider;
+use App\Traits\ImageHandleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class HomeSliderController extends Controller
 {
+    use ImageHandleTrait;
     /**
      * Get all sliders for customer.
      */
@@ -55,25 +57,15 @@ class HomeSliderController extends Controller
             $slider = new home_slider();
             $slider->slider = '';
             $slider->save();
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = 'home_slider_' . $slider->_id . '.' . $image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('public/home_sliders', $imageName);
 
-                // Update the slider with the image path
-                $slider->slider = 'storage/app/public/home_sliders/' . $imageName;
-                $slider->save();
-            }
-            else
-            {
-                DB::rollBack();
-                $response = [
-                    'status_code' => 400,
-                    'status' => 'Fail',
-                    'message' =>'Image field must contain valid image'
-                ];
-                return response()->json($response, 400);
-            }
+            $image=$this->decodeBase64Image($request->image);
+            // Handle file upload
+            $imageName = 'home_slider_' . $slider->_id . '.' . $image['extension'];
+            $imagePath = 'public/home_sliders/' . $imageName;
+            Storage::put($imagePath, $image['imageData']);
+            $slider->slider = 'storage/app/public/home_sliders/' . $imageName;
+            $slider->save();
+
             DB::commit();
             $response = [
                 'status_code' => 200,
@@ -113,8 +105,7 @@ class HomeSliderController extends Controller
         DB::beginTransaction();
         try {
             $slider = home_slider::find($request->slider_id);
-            if(!$slider)
-            {
+            if (!$slider) {
                 $response = [
                     'status_code' => 404,
                     'message' => 'Slider not found',

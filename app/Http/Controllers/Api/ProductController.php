@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\product;
 use App\Models\product_category;
 use App\Models\product_size;
+use App\Traits\ImageHandleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    use ImageHandleTrait;
     /**
      * Add Product.
      */
@@ -24,7 +26,7 @@ class ProductController extends Controller
             'veg' => 'required',
             'price' => 'required',
             'category_id' => 'required',
-            // 'sizes' => 'array'
+            'sizes' => 'array'
         ]);
         if ($validator->fails()) {
             $response = [
@@ -57,15 +59,6 @@ class ProductController extends Controller
                 return response()->json($response, 200);
             }
 
-            if (!$request->hasFile('image')) {
-                $response = [
-                    'status_code' => 400,
-                    'status' => 'Fail',
-                    'message' => 'Image field is required'
-                ];
-                return response()->json($response, 400);
-            }
-
             $product = new product();
             $product->name = $name;
             $product->veg = $request->veg;
@@ -77,24 +70,17 @@ class ProductController extends Controller
             $product->product_category_id = $request->category_id;
 
             $product->save();
+            $image=$this->decodeBase64Image($request->image);
+            $imageName = 'product_' . $product->_id . '.' . $image['extension'];
+            $imagePath = 'public/products/' . $imageName;
+            Storage::put($imagePath, $image['imageData']);
 
-            $image = $request->file('image');
-            $imageName = 'products_' . $product->_id . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/products', $imageName);
-
-            // Update product image
             $product->image = 'storage/app/public/products/' . $imageName;
             $product->save();
 
 
             if ($request->has('sizes')) {
-                if (is_string($request->sizes)) {
-                    // Convert the string to an array
-                    $sizeArray = json_decode($request->sizes, true);
-                } else {
-                    // Assume $input is already an array
-                    $sizeArray = $request->sizes;
-                }
+                $sizeArray = $request->sizes;
                 if (is_array($sizeArray) && !empty($sizeArray)) {
                     foreach ($sizeArray as $size) {
                         if (isset($size['size']) && isset($size['price'])) {
@@ -107,7 +93,6 @@ class ProductController extends Controller
                     }
                 }
             }
-
             DB::commit();
             $response = [
                 'status_code' => 200,
@@ -179,16 +164,8 @@ class ProductController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-            if (!$request->hasFile('image')) {
-                $response = [
-                    'status_code' => 400,
-                    'status' => 'Fail',
-                    'message' => 'Image field is required'
-                ];
-                return response()->json($response, 400);
-            }
-            $oldImage = $product->image;
 
+            $oldImage = $product->image;
             $product->name = $name;
             $product->veg = $request->veg;
             $product->price = $request->price;
@@ -197,12 +174,12 @@ class ProductController extends Controller
             if ($request->has('best_seller')) {
                 $product->best_seller = $request->best_seller;
             }
-            if($request->hasFile('image'))
-            {
-                $image = $request->file('image');
-                $imageName = 'products_' . $product->_id . '.' . $image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('public/products', $imageName);
-    
+            if ($request->has('image')) {
+                $image=$this->decodeBase64Image($request->image);
+                $imageName = 'product_' . $product->_id . '.' . $image['extension'];
+                $imagePath = 'public/products/' . $imageName;
+                Storage::put($imagePath, $image['imageData']);
+
                 $path = str_replace('storage/app/', '', $oldImage);
                 if ($path !== $imagePath) {
                     if ($oldImage && Storage::exists($path)) {

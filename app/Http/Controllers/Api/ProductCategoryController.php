@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\product;
 use App\Models\product_category;
+use App\Traits\ImageHandleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductCategoryController extends Controller
 {
+    use ImageHandleTrait;
     /**
      * Add Product Category.
      */
@@ -43,25 +45,17 @@ class ProductCategoryController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-            if (!$request->hasFile('image')) {
-                $response = [
-                    'status_code' => 400,
-                    'status' => 'Fail',
-                    'message' => 'Image field is required'
-                ];
-                return response()->json($response, 400);
-            }
 
             $product_category = new product_category();
             $product_category->name = $name;
             $product_category->image = '';
             $product_category->save();
 
-            $image = $request->file('image');
-            $imageName = 'product_categories_' . $product_category->_id . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/product_categories', $imageName);
+            $image=$this->decodeBase64Image($request->image);
+            $imageName = 'product_category_' . $product_category->_id . '.' . $image['extension'];
+            $imagePath = 'public/product_categories/' . $imageName;
+            Storage::put($imagePath, $image['imageData']);
 
-            // Update product category image
             $product_category->image = 'storage/app/public/product_categories/' . $imageName;
             $product_category->save();
             DB::commit();
@@ -123,21 +117,14 @@ class ProductCategoryController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-            if (!$request->hasFile('image')) {
-                $response = [
-                    'status_code' => 400,
-                    'status' => 'Fail',
-                    'message' => 'Image field is required'
-                ];
-                return response()->json($response, 400);
-            }
+
             $oldImage = $category->image;
             $category->name = $name;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = 'product_categories_' . $category->_id . '.' . $image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('public/product_categories', $imageName);
-
+            if ($request->has('image')) {
+                $image=$this->decodeBase64Image($request->image);
+                $imageName = 'product_category_' . $category->_id . '.' . $image['extension'];
+                $imagePath = 'public/product_categories/' . $imageName;
+                Storage::put($imagePath, $image['imageData']);
 
                 $path = str_replace('storage/app/', '', $oldImage);
                 if ($path !== $imagePath) {
@@ -145,7 +132,6 @@ class ProductCategoryController extends Controller
                         Storage::delete($path);
                     }
                 }
-
                 // Update product category image
                 $category->image = 'storage/app/public/product_categories/' . $imageName;
             }

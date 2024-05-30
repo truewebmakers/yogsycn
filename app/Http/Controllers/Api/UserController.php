@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\user_otp;
+use App\Traits\ImageHandleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    use ImageHandleTrait;
+
     /**
      * Verify OTP.
      */
@@ -147,12 +150,12 @@ class UserController extends Controller
             }
             if ($request->has('image')) {
                 $oldImage = $user->image;
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $imageName = 'users_' . $user->_id . '.' . $image->getClientOriginalExtension();
-                    $imagePath = $image->storeAs('public/users', $imageName);
+                if ($request->image !== null) {
+                    $image = $this->decodeBase64Image($request->image);
+                    $imageName = 'user_' . $user->_id . '.' . $image['extension'];
+                    $imagePath = 'public/users/' . $imageName;
+                    Storage::put($imagePath, $image['imageData']);
 
-                    // Update product image
                     $user->image = 'storage/app/public/users/' . $imageName;
                     $path = str_replace('storage/app/', '', $oldImage);
                     if ($path !== $imagePath) {
