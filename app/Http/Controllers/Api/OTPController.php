@@ -39,7 +39,7 @@ class OTPController extends Controller
         DB::beginTransaction();
         try {
             user_otp::where('phoneno', $request->phoneno)->delete();
-            $otp = rand(100000, 999999);
+            $otp = rand(1000, 9999);
             $message = "Hi Your login OTP for Yours Second Wife Restaurent App is $otp";
             $this->twilio->messages->create($request->phoneno, [
                 // 'from' => env('TWILIO_PHONE_NUMBER'),
@@ -54,8 +54,8 @@ class OTPController extends Controller
             $user_otp->_id = $code;
             $user_otp->otp = $otp;
             $user_otp->phoneno = $request->phoneno;
-            $user_otp->expire_time = now()->addSeconds(30);
-            // $user_otp->expire_time = now()->addMinutes(30);
+            // $user_otp->expire_time = now()->addSeconds(30);
+            $user_otp->expire_time = now()->addMinutes(30);
             $user_otp->save();
             DB::commit();
             $response = [

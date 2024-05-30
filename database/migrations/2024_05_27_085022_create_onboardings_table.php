@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('onboardings', function (Blueprint $table) {
-            $table->id();
+            $table->id('_id');
             $table->string('title')->nullable();
-            $table->string('description')->nullable();
+            $table->string('description',5000)->nullable();
             $table->timestamps();
         });
     }

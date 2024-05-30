@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admins', function (Blueprint $table) {
-            $table->string('_id',6)->primary();
+            $table->id('_id');
+            // $table->string('_id',6)->primary();
             $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->timestamps();

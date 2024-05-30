@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('home_sliders', function (Blueprint $table) {
-            $table->id('_id');
-            $table->string('slider')->nullable();
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('home_sliders');
+        Schema::dropIfExists('addresses');
     }
 };

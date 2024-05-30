@@ -31,7 +31,8 @@ class AdminController extends Controller
         }
         DB::beginTransaction();
         try {
-            $existingUser = admin::where('username', $request->username)->first();
+            $name=trim($request->username);
+            $existingUser = admin::where('username', $name)->first();
             if ($existingUser) {
                 $response = [
                     'status_code' => 400,
@@ -39,19 +40,18 @@ class AdminController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-            $code = $this->generatSmallLettersCode(6);
+            // $code = $this->generatSmallLettersCode(6);
             $admin = new admin();
-            $admin->_id = $code;
-            $admin->username = $request->username;
-            $admin->password = $request->password;
+            // $admin->_id = $code;
+            $admin->username = $name;
+            $admin->password = trim($request->password);
             $admin->save();
             DB::commit();
             $response = [
                 'status_code' => 200,
                 'status' => 'Success',
-                'user'=>$admin,
-                'code'=>$code,
-                
+                'user' => $admin,
+
                 'message' => 'User registered successfully'
             ];
             return response()->json($response, 200);
@@ -60,7 +60,7 @@ class AdminController extends Controller
             $response = [
                 'status_code' => 500,
                 'status' => 'Fail',
-                'message' => 'Failed to Login.'
+                'message' => 'Failed to Register.'
             ];
             return response()->json($response, 500);
         }
@@ -93,9 +93,11 @@ class AdminController extends Controller
                 return response()->json($response, 200);
             }
             if ($request->password === $user->password) {
+                // $token = $user->createToken('AdminToken', ['admin'])->accessToken;
                 $response = [
                     'status_code' => 200,
                     'data' => $user,
+                    // 'token'=>$token,
                     'message' => 'Login successfully'
                 ];
                 return response()->json($response, 200);
@@ -106,8 +108,6 @@ class AdminController extends Controller
                 ];
                 return response()->json($response, 200);
             }
-            // $code=$this->generatSmallLettersCode(6);
-            // DB::commit();
             $response = [
                 'status_code' => 200,
                 'status' => 'Success',
@@ -115,7 +115,6 @@ class AdminController extends Controller
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
-            DB::rollBack();
             $response = [
                 'status_code' => 500,
                 'status' => 'Fail',

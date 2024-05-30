@@ -57,4 +57,8 @@ class User extends Authenticatable
     //         'password' => 'hashed',
     //     ];
     // }
+    // public function getAuthIdentifierName()
+    // {
+    //     return '_id'; // Change to your identifier column name if different
+    // }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,18 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+        // // Define your scopes here
+        // Passport::tokensCan([
+        //     'user' => 'Access user-specific endpoints',
+        //     'admin' => 'Access user-specific endpoints',
+        //     // Add other scopes as needed
+        // ]);
+
+        // // Optionally, set default scope
+        // Passport::setDefaultScope([
+        //     'user',
+        //     'admin'
+        // ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\user_otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -65,17 +66,24 @@ class UserController extends Controller
             if (!$existingUser) {
                 $user = new User();
                 $user->phoneno = $request->phoneno;
+                $user->name = null;
+                $user->email = null;
+                $user->gender = null;
+                $user->dob = null;
+                $user->aniversary_date = null;
+                $user->disable = 0;
                 $user->save();
             } else {
                 $user = $existingUser;
             }
-            $token = $user->createToken('auth_token')->accessToken;
+            // $token = $user->createToken('UserToken', ['user'])->accessToken;
+            // $token = $user->createToken('auth_token')->accessToken;
             DB::commit();
             $response = [
                 'status_code' => 200,
                 'status' => 'Success',
                 'data' => $user,
-                'token' => $token,
+                // 'token' => $token,
                 'message' => 'User logged in successfully.'
             ];
             return response()->json($response, 200);
@@ -91,50 +99,96 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Update Profile.
      */
-    public function create()
+    public function updateProfile(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'email' => 'email',
+        ]);
+        if ($validator->fails()) {
+            $response = [
+                'status_code' => 400,
+                'status' => 'Fail',
+                'message' => $validator->messages()
+            ];
+            return response()->json($response, 400);
+        }
+        DB::beginTransaction();
+        try {
+            $user = User::where('_id', $request->user_id)->where('disable', 0)->first();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            if (!$user) {
+                $response = [
+                    'status_code' => 404,
+                    'message' => 'User not found.'
+                ];
+                return response()->json($response, 404);
+            }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+            if ($request->has('name')) {
+                $user->name = $request->name;
+            }
+            if ($request->has('phoneno')) {
+                $user->phoneno = $request->phoneno;
+            }
+            if ($request->has('email')) {
+                $user->email = $request->email;
+            }
+            if ($request->has('dob')) {
+                $user->dob = $request->dob;
+            }
+            if ($request->has('aniversary_date')) {
+                $user->aniversary_date = $request->aniversary_date;
+            }
+            if ($request->has('gender')) {
+                $user->gender = $request->gender;
+            }
+            if ($request->has('image')) {
+                $oldImage = $user->image;
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $imageName = 'users_' . $user->_id . '.' . $image->getClientOriginalExtension();
+                    $imagePath = $image->storeAs('public/users', $imageName);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+                    // Update product image
+                    $user->image = 'storage/app/public/users/' . $imageName;
+                    $path = str_replace('storage/app/', '', $oldImage);
+                    if ($path !== $imagePath) {
+                        if ($oldImage && Storage::exists($path)) {
+                            Storage::delete($path);
+                        }
+                    }
+                } else {
+                    $path = str_replace('storage/app/', '', $oldImage);
+                    if ($path) {
+                        if ($oldImage && Storage::exists($path)) {
+                            Storage::delete($path);
+                        }
+                    }
+                    $user->image = null;
+                }
+            }
+            $user->save();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            DB::commit();
+            $response = [
+                'status_code' => 200,
+                'status' => 'Success',
+                'data' => $user,
+                'message' => 'User profile updated successfully.'
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            print($e);
+            DB::rollBack();
+            $response = [
+                'status_code' => 500,
+                'status' => 'Fail',
+                'message' => 'Failed to update user profile.'
+            ];
+            return response()->json($response, 500);
+        }
     }
 }

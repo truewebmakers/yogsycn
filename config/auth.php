@@ -42,8 +42,12 @@ return [
         ],
         'api' => [
            'driver' => 'passport',
-           'provider' => 'users', // Use the admin_users' provider for API authentication
-        ]
+           'provider' => 'users', // Use the users' provider for API authentication
+        ],
+        // 'admin' => [
+        //    'driver' => 'passport',
+        //    'provider' => 'admins', // Use the admins' provider for API authentication
+        // ]
     ],
 
     /*
@@ -68,10 +72,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-       // 'admin_users' => [
-          //  'driver' => 'eloquent',
-          //  'model' => App\Models\admin_user::class,
-       // ],
+    //    'admins' => [
+    //        'driver' => 'eloquent',
+    //        'model' => App\Models\admin::class,
+    //    ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -104,12 +108,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        //'admin_users' => [
-           // 'provider' => 'admin_users',
-           // 'table' => 'password_reset_tokens',
-          //  'expire' => 60,
-          //  'throttle' => 60,
-       // ],
+    //     'admins' => [
+    //        'provider' => 'admins',
+    //        'table' => 'password_reset_tokens',
+    //        'expire' => 60,
+    //        'throttle' => 60,
+    //    ],
     ],
 
     /*
