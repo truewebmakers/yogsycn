@@ -34,7 +34,8 @@ class ArticleController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 400,
-                'message' => $validator->messages()
+                'message' => $validator->messages(),
+                'req' => $request->all()
             ], 400);
         }
         DB::beginTransaction();
