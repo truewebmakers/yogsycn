@@ -461,13 +461,21 @@ class YogaPoseController extends Controller
             ], 400);
         }
         try {
-            $category = pose_category::findOrFail($request->category_id);
-            $poses = yoga_pose::where('category_id', $category->id)->where('draft',0)->get();
-            return response()->json([
-                'status_code' => 200,
-                'data' => $poses,
-                'message' => 'Yoga Poses retrieved successfully'
-            ], 200);
+            $category = pose_category::find($request->category_id);
+            if($category){
+                $poses = yoga_pose::where('category_id', $category->id)->where('draft',0)->get();
+                return response()->json([
+                    'status_code' => 200,
+                    'data' => $poses,
+                    'message' => 'Yoga Poses retrieved successfully'
+                ], 200);
+            }else{
+                return response()->json([
+                    'status_code' => 403,
+                    'message' => 'No Pose Category found'
+                ], 403);
+            }
+
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
