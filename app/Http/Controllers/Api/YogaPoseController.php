@@ -463,7 +463,7 @@ class YogaPoseController extends Controller
         try {
             // $category = pose_category::find($request->category_id);
 
-            $category = pose_category::get();
+            $category = pose_category::with('yogaPoses')->get();
             // if($category){
                //  $poses = yoga_pose::where('draft',0)->get();
 
