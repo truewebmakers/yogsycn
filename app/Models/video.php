@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class onboarding extends Model
+class video extends Model
 {
     use HasFactory;
-    protected $primaryKey = '_id';
+    protected $primaryKey = 'id';
     protected $hidden = ['created_at', 'updated_at'];
-
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'url',
+        'related_poses'
     ];
 }

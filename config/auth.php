@@ -40,13 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'api' => [
-           'driver' => 'passport',
-           'provider' => 'users', // Use the users' provider for API authentication
-        ],
+        // 'user' => [
+        //    'driver' => 'passport',
+        //    'provider' => 'users', // Use the users provider for API authentication
+        // ],
         // 'admin' => [
         //    'driver' => 'passport',
-        //    'provider' => 'admins', // Use the admins' provider for API authentication
+        //    'provider' => 'admins', // Use the admins provider for API authentication
         // ]
     ],
 
@@ -68,18 +68,18 @@ return [
     */
 
     'providers' => [
+        //     'users' => [
+        //         'driver' => 'eloquent',
+        //         'model' => App\Models\video::class,
+        //     ],
+        //    'admins' => [
+        //        'driver' => 'eloquent',
+        //        'model' => App\Models\artical::class,
+        //    ],
         'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'driver' => 'database',
+            'table' => 'users',
         ],
-    //    'admins' => [
-    //        'driver' => 'eloquent',
-    //        'model' => App\Models\admin::class,
-    //    ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -108,12 +108,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-    //     'admins' => [
-    //        'provider' => 'admins',
-    //        'table' => 'password_reset_tokens',
-    //        'expire' => 60,
-    //        'throttle' => 60,
-    //    ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*

@@ -1,72 +1,52 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\HomeSliderController;
-use App\Http\Controllers\Api\OnboardingController;
-use App\Http\Controllers\Api\OTPController;
-use App\Http\Controllers\Api\ProductCategoryController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\ProductSizeController;
-use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ArticleCategoryController;
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api\YogaPoseController;
 use Illuminate\Support\Facades\Route;
 
 
-//user OTP
-Route::post('user/sendotp', [OTPController::class, 'sendOTP']);
-Route::post('user/verifyotp', [UserController::class, 'verifyOTP']);
-//admin
-Route::post('admin/login', [AdminController::class, 'adminLogin']);
-Route::post('admin/register', [AdminController::class, 'adminRegistration']);
+Route::get('video/getall', [VideoController::class, 'getAllVideos']);
 
-//admin sliders
-Route::post('admin/slider/add', [HomeSliderController::class, 'addSlider']);
-Route::post('admin/slider/delete', [HomeSliderController::class, 'deleteSlider']);
-//both
-Route::get('slider/getsliders', [HomeSliderController::class, 'getSliders']);
+Route::prefix('admin')->group(function () {
+    //videos
+    Route::post('video/add', [VideoController::class, 'addVideo']);
+    Route::post('video/update', [VideoController::class, 'updateVideo']);
+    Route::post('video/delete', [VideoController::class, 'deleteVideo']);
 
-//both
-Route::get('/onboarding/getonboardings', [OnboardingController::class, 'getOnboardings']);
-//admin
-Route::post('admin/onboarding/add', [OnboardingController::class, 'addOnboarding']);
-Route::post('admin/onboarding/update', [OnboardingController::class, 'updateOnboarding']);
-Route::post('admin/onboarding/delete', [OnboardingController::class, 'deleteOnboarding']);
+    //artical category
+    Route::post('articalcategory/add', [ArticleCategoryController::class, 'addCategory']);
+    Route::post('articalcategory/update', [ArticleCategoryController::class, 'updateCategory']);
+    Route::post('articalcategory/delete', [ArticleCategoryController::class, 'deleteCategory']);
+    Route::get('articalcategory/getall', [ArticleCategoryController::class, 'getAllCategoriesAdmin']);
 
-//product category
-//admin
-Route::post('admin/productcategory/add', [ProductCategoryController::class, 'addProductCategory']);
-Route::post('admin/productcategory/update', [ProductCategoryController::class, 'updateProductCategory']);
-Route::post('admin/productcategory/delete', [ProductCategoryController::class, 'deleteProductCategory']);
-//both
-Route::get('productcategory/getallcategories', [ProductCategoryController::class, 'getAllProductCategories']);
+    //artical
+    Route::post('artical/add', [ArticleController::class, 'addArticle']);
+    Route::post('artical/update', [ArticleController::class, 'updateArticle']);
+    Route::post('artical/delete', [ArticleController::class, 'deleteArticle']);
+    Route::get('artical/get', [ArticleController::class, 'getAllArticlesAdmin']);
 
-//product
-Route::post('admin/product/add', [ProductController::class, 'addProduct']);
-Route::post('admin/product/update', [ProductController::class, 'updateProduct']);
-Route::post('admin/product/delete', [ProductController::class, 'deleteProduct']);
-//customer
-Route::get('user/product/getproductsbycategory', [ProductController::class, 'getAllProductByCategoryCustomer']);
-Route::get('user/product/getbestsellers', [ProductController::class, 'getBestSeller']);
-Route::get('user/product/search', [ProductController::class, 'searchProduct']);
-//admin
-Route::get('admin/product/getproductsbycategory', [ProductController::class, 'getAllProductByCategoryAdmin']);
+    //yoga poses category
+    Route::post('posecategory/add', [YogaPoseController::class, 'addPoseCategory']);
+    Route::post('posecategory/update', [YogaPoseController::class, 'updatePoseCategory']);
+    Route::post('posecategory/delete', [YogaPoseController::class, 'deletePoseCategory']);
+    Route::get('posecategory/getall', [YogaPoseController::class, 'getAllPosesCategoriesAdmin']);
 
-//product size
-Route::post('admin/product/size/add', [ProductSizeController::class, 'addProductSize']);
-Route::post('admin/product/size/update', [ProductSizeController::class, 'updateProductSize']);
-Route::post('admin/product/size/delete', [ProductSizeController::class, 'deleteProductSize']);
+    //yoga pose
+    Route::post('yogapose/add', [YogaPoseController::class, 'addYogaPose']);
+    Route::post('yogapose/update', [YogaPoseController::class, 'updateYogaPose']);
+    Route::post('yogapose/delete', [YogaPoseController::class, 'deleteYogaPose']);
+    Route::get('yogapose/bycategory/get', [YogaPoseController::class, 'getAllYogaPosesByCategory']);
+    Route::get('yogapose/getall', [YogaPoseController::class, 'getAllYogaPosesAdmin']);
+});
 
-//profile
-Route::post('user/profile/update', [UserController::class, 'updateProfile']);
-
-
-//admin onboardings
-
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('slider/getsliders', [HomeSliderController::class, 'getSliders']);
-// });
-
-// Route::middleware(['admin'])->group(function () {
-// // Route::middleware(['auth:admin', 'admin'])->group(function () {
-//     // Route::post('admin/slider/add', [HomeSliderController::class, 'addSlider']);
-// });
+Route::prefix('user')->group(function () {
+    Route::get('artical/getall', [ArticleController::class, 'getAllArticlesUser']);
+    Route::get('artical/latest/get', [ArticleController::class, 'getLatestArticles']);
+    Route::get('artical/expertapproved/get', [ArticleController::class, 'getExpertApprovedArticles']);
+    Route::get('articalcategory/getall', [ArticleCategoryController::class, 'getAllCategoriesUser']);
+    Route::get('posecategory/getall', [YogaPoseController::class, 'getAllPosesCategoriesUser']);
+    Route::get('yogapose/getall', [YogaPoseController::class, 'getAllYogaPosesUser']);
+    Route::get('yogapose/details/get', [YogaPoseController::class, 'getYogaPoseDetails']);
+});

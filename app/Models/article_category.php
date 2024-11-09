@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class home_slider extends Model
+class article_category extends Model
 {
     use HasFactory;
-    protected $primaryKey = '_id';
+    protected $primaryKey = 'id';
     protected $hidden = ['created_at', 'updated_at'];
-
     protected $fillable = [
-        'slider'
+        'name',
     ];
+
+    public function articles()
+    {
+        return $this->hasMany(article::class, 'category_id');
+    }
 }

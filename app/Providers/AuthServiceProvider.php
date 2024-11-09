@@ -22,18 +22,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
-        // // Define your scopes here
+        // Define your scopes here
         // Passport::tokensCan([
         //     'user' => 'Access user-specific endpoints',
-        //     'admin' => 'Access user-specific endpoints',
-        //     // Add other scopes as needed
-        // ]);
-
-        // // Optionally, set default scope
-        // Passport::setDefaultScope([
-        //     'user',
-        //     'admin'
+        //     'admin' => 'Access admin-specific endpoints',
         // ]);
     }
 }
