@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('yoga_poses', function (Blueprint $table) {
-            //
+
             $table->dropColumn('meta_tag');
         });
     }
