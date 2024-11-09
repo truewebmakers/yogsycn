@@ -462,7 +462,7 @@ class YogaPoseController extends Controller
         // }
         try {
             // $category = pose_category::find($request->category_id);
-            if($category){
+            // if($category){
                  $poses = yoga_pose::where('draft',0)->get();
 
               //  $poses = yoga_pose::where('category_id', $category->id)->where('draft',0)->get();
@@ -471,12 +471,12 @@ class YogaPoseController extends Controller
                     'data' => $poses,
                     'message' => 'Yoga Poses retrieved successfully'
                 ], 200);
-            }else{
-                return response()->json([
-                    'status_code' => 404,
-                    'message' => 'No Pose Category found'
-                ], 404);
-            }
+            // }else{
+            //     return response()->json([
+            //         'status_code' => 404,
+            //         'message' => 'No Pose Category found'
+            //     ], 404);
+            // }
 
         } catch (\Exception $e) {
             return response()->json([
