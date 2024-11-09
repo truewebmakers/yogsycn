@@ -116,7 +116,7 @@ class ArticleController extends Controller
             }
             return response()->json([
                 'status_code' => 500,
-                'message' => 'Failed to add article' . $e->getMessage()
+                'message' => 'Failed to add article'
             ], 500);
         }
     }

@@ -471,7 +471,7 @@ class YogaPoseController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status_code' => 500,
-                'message' => 'Failed to retrieve yoga poses'
+                'message' => 'Failed to retrieve yoga poses'. $e->getMessage()
             ], 500);
         }
     }
