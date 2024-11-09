@@ -462,13 +462,15 @@ class YogaPoseController extends Controller
         // }
         try {
             // $category = pose_category::find($request->category_id);
+
+            $category = pose_category::get();
             // if($category){
-                 $poses = yoga_pose::where('draft',0)->get();
+               //  $poses = yoga_pose::where('draft',0)->get();
 
               //  $poses = yoga_pose::where('category_id', $category->id)->where('draft',0)->get();
                 return response()->json([
                     'status_code' => 200,
-                    'data' => $poses,
+                    'data' => $category,
                     'message' => 'Yoga Poses retrieved successfully'
                 ], 200);
             // }else{
