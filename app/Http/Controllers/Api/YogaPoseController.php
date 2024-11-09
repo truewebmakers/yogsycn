@@ -462,7 +462,7 @@ class YogaPoseController extends Controller
         }
         try {
             $category = pose_category::findOrFail($request->category_id);
-            $poses = yoga_pose::where('category_id', $category->id)->get();
+            $poses = yoga_pose::where('category_id', $category->id)->where('draft',0)->get();
             return response()->json([
                 'status_code' => 200,
                 'data' => $poses,
