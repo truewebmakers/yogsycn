@@ -28,7 +28,8 @@ class ArticleController extends Controller
             'is_expert_approved' => 'boolean',
             'category_id' => 'required|integer|min:1',
             'related_yoga_poses' => 'array',
-            'draft' => 'boolean'
+            'draft' => 'boolean',
+            'meta_tag' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -60,6 +61,11 @@ class ArticleController extends Controller
             if ($request->has('draft')) {
                 $article->draft = $request->draft;
             }
+            if ($request->has('meta_tag')) {
+                $article->meta_tag = $request->meta_tag;
+            }
+
+
             if ($request->has('is_expert_approved')) {
                 $article->is_expert_approved = $request->is_expert_approved;
             }
@@ -373,13 +379,13 @@ class ArticleController extends Controller
                             }
                             $article->related_yoga_poses = $relatedPoses;
                             $article->makeHidden('related_poses');
-    
+
                             return $article;
                         });
                         return $category;
                     });
             }
-            
+
             return response()->json([
                 'status_code' => 200,
                 'data' => $articles,
@@ -394,7 +400,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Get All Latest Articles 
+     * Get All Latest Articles
      */
     public function getLatestArticles()
     {
@@ -433,7 +439,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Get All Expert Approved Articles 
+     * Get All Expert Approved Articles
      */
     public function getExpertApprovedArticles()
     {
