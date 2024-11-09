@@ -22,7 +22,7 @@ class yoga_pose extends Model
         'guidance',
         'things_keep_in_mind',
         'category_id',
-        'draft'
+        'draft','meta_tag'
     ];
 
     public function poseCategory()

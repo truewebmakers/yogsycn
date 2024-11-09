@@ -132,7 +132,8 @@ class ArticleController extends Controller
             'is_expert_approved' => 'boolean',
             'category_id' => 'integer',
             'related_yoga_poses' => 'array',
-            'draft' => 'boolean'
+            'draft' => 'boolean',
+            'meta_tag' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -170,6 +171,9 @@ class ArticleController extends Controller
             }
             if ($request->has('is_expert_approved')) {
                 $article->is_expert_approved = $request->is_expert_approved;
+            }
+            if ($request->has('meta_tag')) {
+                $article->meta_tag = $request->meta_tag;
             }
             if ($request->has('related_yoga_poses')) {
                 if (!empty($request->related_yoga_poses)) {

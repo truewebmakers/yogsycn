@@ -225,7 +225,8 @@ class YogaPoseController extends Controller
             'name' => 'required',
             'image' => 'required',
             'category_id' => 'required|integer|min:1',
-            'draft' => 'boolean'
+            'draft' => 'boolean',
+            'meta_tag' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -266,6 +267,11 @@ class YogaPoseController extends Controller
             if ($request->has('draft')) {
                 $pose->draft = $request->draft;
             }
+            if ($request->has('meta_tag')) {
+                $pose->meta_tag = $request->meta_tag;
+            }
+
+
             $pose->save();
             if ($request->filled('image')) {
                 $image = $this->decodeBase64Image($request->image);
@@ -301,7 +307,9 @@ class YogaPoseController extends Controller
         $validator = Validator::make($request->all(), [
             'pose_id' => 'required',
             'category_id' => 'integer',
-            'draft' => 'boolean'
+            'draft' => 'boolean',
+            'meta_tag' => 'nullable|string',
+
 
         ]);
         if ($validator->fails()) {
@@ -347,6 +355,10 @@ class YogaPoseController extends Controller
             if ($request->has('draft')) {
                 $pose->draft = $request->draft;
             }
+            if ($request->has('meta_tag')) {
+                $pose->meta_tag = $request->meta_tag;
+            }
+
             $pose->save();
 
             if ($request->filled('image')) {
