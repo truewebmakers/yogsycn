@@ -451,15 +451,15 @@ class YogaPoseController extends Controller
      */
     public function getAllYogaPosesByCategory(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'category_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status_code' => 400,
-                'message' => $validator->messages()
-            ], 400);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'category_id' => 'required'
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status_code' => 400,
+        //         'message' => $validator->messages()
+        //     ], 400);
+        // }
         try {
             // $category = pose_category::find($request->category_id);
             if($category){
