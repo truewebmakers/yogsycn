@@ -619,7 +619,7 @@ class YogaPoseController extends Controller
         }
     }
 
-    public function getArticleDeatailsById($id)
+    public function getYogaPoseDeatailsById($id)
     {
         $yoga_pose = yoga_pose::where('id', $id)->get();
 
