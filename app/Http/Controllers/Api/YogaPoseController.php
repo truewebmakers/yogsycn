@@ -309,9 +309,8 @@ class YogaPoseController extends Controller
             'category_id' => 'integer',
             'draft' => 'boolean',
             'meta_tag' => 'nullable|string',
-
-
         ]);
+
         if ($validator->fails()) {
             return response()->json([
                 'status_code' => 400,
@@ -386,7 +385,7 @@ class YogaPoseController extends Controller
             DB::rollBack();
             return response()->json([
                 'status_code' => 500,
-                'message' => 'Failed to update yoga pose'
+                'message' => 'Failed to update yoga pose' .$e
             ], 500);
         }
     }
