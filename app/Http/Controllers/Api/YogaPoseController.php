@@ -506,7 +506,8 @@ class YogaPoseController extends Controller
     public function getAllYogaPosesAdmin()
     {
         try {
-            $poses = yoga_pose::where('draft',0)->get();
+            // $poses = yoga_pose::where('draft',0)->get();
+            $poses = yoga_pose::get();
             return response()->json([
                 'status_code' => 200,
                 'data' => $poses,
