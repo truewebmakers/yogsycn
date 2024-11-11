@@ -20,6 +20,7 @@ Route::prefix('admin')->group(function () {
     Route::post('articalcategory/update', [ArticleCategoryController::class, 'updateCategory']);
     Route::post('articalcategory/delete', [ArticleCategoryController::class, 'deleteCategory']);
     Route::get('articalcategory/getall', [ArticleCategoryController::class, 'getAllCategoriesAdmin']);
+    Route::get('articalcategory/get/{id}', [ArticleCategoryController::class, 'getAllCategoriesAdmin']);
 
     //artical
     Route::post('artical/add', [ArticleController::class, 'addArticle']);
@@ -49,4 +50,5 @@ Route::prefix('user')->group(function () {
     Route::get('posecategory/getall', [YogaPoseController::class, 'getAllPosesCategoriesUser']);
     Route::get('yogapose/getall', [YogaPoseController::class, 'getAllYogaPosesUser']);
     Route::get('yogapose/details/get', [YogaPoseController::class, 'getYogaPoseDetails']);
+    // Route::get('yogapose/details/{id}', [YogaPoseController::class, 'getYogaPoseDetails']);
 });

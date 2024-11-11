@@ -572,6 +572,11 @@ class YogaPoseController extends Controller
     /**
      * Get Yoga Pose Details
      */
+
+     public function getYogaPoseDetailsById(Request $request,$id)
+     {
+
+     }
     public function getYogaPoseDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [

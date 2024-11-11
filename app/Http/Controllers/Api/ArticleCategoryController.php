@@ -155,10 +155,15 @@ class ArticleCategoryController extends Controller
     /**
      * Get All Article Categories for admin
      */
-    public function getAllCategoriesAdmin()
+    public function getAllCategoriesAdmin($id="")
     {
         try {
-            $categories = article_category::all();
+            if($id){
+                $categories = article_category::where('id',$id)->get();
+            }else{
+                $categories = article_category::all();
+            }
+
             return response()->json([
                 'status_code' => 200,
                 'data' => $categories,
