@@ -618,4 +618,21 @@ class YogaPoseController extends Controller
             ], 500);
         }
     }
+
+    public function getArticleDeatailsById($id)
+    {
+        $yoga_pose = yoga_pose::where('id', $id)->get();
+
+        if($yoga_pose->isEmpty()){
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Failed to retrieve yoga pose'
+            ], 404);
+        }
+        return response()->json([
+            'status_code' => 200,
+            'data' => $yoga_pose,
+            'message' => 'yoga pose retrieved successfully'
+        ], 200);
+    }
 }

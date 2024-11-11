@@ -482,7 +482,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function getArticleDeatailsById($id)
+    public function getYogaPoseDeatailsById($id)
     {
         $articles = article::where('id', $id)->get();
 
