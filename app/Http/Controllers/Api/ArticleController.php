@@ -481,4 +481,21 @@ class ArticleController extends Controller
             ], 500);
         }
     }
+
+    public function getArticleDeatailsById($id)
+    {
+        $articles = article::where('id', $id)->get();
+
+        if($articles->isEmpty()){
+            return response()->json([
+                'status_code' => 404,
+                'message' => 'Failed to retrieve articles'
+            ], 404);
+        }
+        return response()->json([
+            'status_code' => 200,
+            'data' => $articles,
+            'message' => 'Articles retrieved successfully'
+        ], 200);
+    }
 }

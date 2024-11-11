@@ -51,6 +51,6 @@ Route::prefix('user')->group(function () {
     Route::get('yogapose/getall', [YogaPoseController::class, 'getAllYogaPosesUser']);
     Route::get('yogapose/details/get', [YogaPoseController::class, 'getYogaPoseDetails']);
 
-    Route::get('articalcategory/get/{id}', [ArticleCategoryController::class, 'getAllCategoriesAdmin']);
+    Route::get('artical/get/{id}', [ArticleController::class, 'getArticleDeatailsById']);
     // Route::get('yogapose/details/{id}', [YogaPoseController::class, 'getYogaPoseDetails']);
 });
