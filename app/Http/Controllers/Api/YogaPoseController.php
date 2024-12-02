@@ -631,9 +631,9 @@ class YogaPoseController extends Controller
         }
     }
 
-    public function getYogaPoseDeatailsById($id)
+    public function getYogaPoseDeatailsById($slug)
     {
-        $yoga_pose = yoga_pose::where('id', $id)->get();
+        $yoga_pose = yoga_pose::where('slug', $slug)->get();
 
         if($yoga_pose->isEmpty()){
             return response()->json([

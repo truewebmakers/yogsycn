@@ -496,9 +496,9 @@ class ArticleController extends Controller
         }
     }
 
-    public function getArticleDeatailsById($id)
+    public function getArticleDeatailsById($slug)
     {
-        $articles = article::where('id', $id)->get();
+        $articles = article::where('slug', $slug)->get();
 
         if($articles->isEmpty()){
             return response()->json([
