@@ -49,7 +49,7 @@ Route::prefix('user')->group(function () {
     Route::get('articalcategory/getall', [ArticleCategoryController::class, 'getAllCategoriesUser']);
     Route::get('posecategory/getall', [YogaPoseController::class, 'getAllPosesCategoriesUser']);
     Route::get('yogapose/getall', [YogaPoseController::class, 'getAllYogaPosesUser']);
-    Route::get('yogapose/details/get', [YogaPoseController::class, 'getYogaPoseDetails']);
+    Route::get('yogapose/details/get/{slug}', [YogaPoseController::class, 'getYogaPoseDetails']);
 
     Route::get('artical/get/{slug}', [ArticleController::class, 'getArticleDeatailsById']);
 

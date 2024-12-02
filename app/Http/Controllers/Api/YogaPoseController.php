@@ -589,19 +589,19 @@ class YogaPoseController extends Controller
      {
 
      }
-    public function getYogaPoseDetails(Request $request)
+    public function getYogaPoseDetails(Request $request,$slug)
     {
-        $validator = Validator::make($request->all(), [
-            'pose_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status_code' => 400,
-                'message' => $validator->messages()
-            ], 400);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'pose_id' => 'required'
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status_code' => 400,
+        //         'message' => $validator->messages()
+        //     ], 400);
+        // }
         try {
-            $pose = yoga_pose::findOrFail($request->pose_id);
+            $pose = yoga_pose::where('slug',$slug)->get()->first();
             $category = pose_category::find($pose->category_id);
             $pose->category_name = $category ? $category->name : null;
             $pose->videos = video::whereNotNull('related_poses')->whereRaw("JSON_CONTAINS(related_poses, $pose->id)")->get()->makeHidden('related_poses');
