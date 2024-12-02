@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('things_keep_in_mind')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('pose_categories');
+            $table->text('slug')->nullable();
             $table->boolean('draft')->default(0)->nullable();
             $table->timestamps();
         });

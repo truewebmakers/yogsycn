@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageHandleTrait;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ArticleController extends Controller
 {
@@ -64,6 +66,9 @@ class ArticleController extends Controller
             }
             if ($request->has('meta_tag')) {
                 $article->meta_tag = $request->meta_tag;
+            }
+            if ($request->has('title')) {
+                $article->slug = $this->makeSlug($request->title);
             }
 
 
@@ -124,6 +129,11 @@ class ArticleController extends Controller
     /**
      * Update Article
      */
+
+     private function makeSlug($title){
+        $slug = Str::slug($title, '-');
+        return $slug;
+     }
     public function updateArticle(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -188,6 +198,10 @@ class ArticleController extends Controller
                 } else {
                     $article->related_poses = null;
                 }
+            }
+
+            if ($request->has('title')) {
+                $article->slug = $this->makeSlug($request->title);
             }
             $article->save();
 

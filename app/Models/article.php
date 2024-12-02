@@ -22,7 +22,7 @@ class article extends Model
         'is_expert_approved',
         'draft',
         'category_id',
-        'related_poses','meta_tag'
+        'related_poses','meta_tag','slug'
     ];
 
     public function articleCategory()

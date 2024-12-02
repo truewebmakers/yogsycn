@@ -24,7 +24,9 @@ return new class extends Migration
             $table->boolean('is_latest')->default(0)->nullable();
             $table->boolean('is_expert_approved')->default(0)->nullable();
             $table->text('related_poses')->nullable();
+            $table->text('slug')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+
             $table->foreign('category_id')->references('id')->on('artical_categories');
             $table->timestamps();
         });

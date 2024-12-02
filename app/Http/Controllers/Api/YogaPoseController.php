@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageHandleTrait;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
 class YogaPoseController extends Controller
 {
     use ImageHandleTrait;
@@ -270,6 +270,9 @@ class YogaPoseController extends Controller
             if ($request->has('meta_tag')) {
                 $pose->meta_tag = $request->meta_tag;
             }
+            if ($request->has('name')) {
+                $pose->slug = $this->makeSlug($request->name);
+            }
 
 
             $pose->save();
@@ -357,6 +360,9 @@ class YogaPoseController extends Controller
             if ($request->has('meta_tag')) {
                 $pose->meta_tag = $request->meta_tag;
             }
+            if ($request->has('name')) {
+                $pose->slug = $this->makeSlug($request->name);
+            }
 
             $pose->save();
 
@@ -389,6 +395,12 @@ class YogaPoseController extends Controller
             ], 500);
         }
     }
+
+
+    private function makeSlug($title){
+        $slug = Str::slug($title, '-');
+        return $slug;
+     }
 
     /**
      * Delete Yoga Pose
