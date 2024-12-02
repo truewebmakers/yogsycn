@@ -309,22 +309,7 @@ class ArticleController extends Controller
         }
         try {
             $category = article_category::findOrFail($request->category_id);
-            $articles = article::get()->map(function ($article) {
-                $relatedPoseIds = json_decode($article->related_poses, true);
-                if (!is_null($relatedPoseIds) && is_array($relatedPoseIds)) {
-                    $relatedPoses = yoga_pose::whereIn('id', $relatedPoseIds)
-                        ->get(['id', 'name']);
-                } else {
-                    $relatedPoses = null;
-                }
-                $article->related_yoga_poses = $relatedPoses;
-                $article->makeHidden('related_poses');
-
-                return $article;
-            });
-
-            // $category = article_category::findOrFail($request->category_id);
-            // $articles = article::where('category_id', $category->id)->get()->map(function ($article) {
+            // $articles = article::get()->map(function ($article) {
             //     $relatedPoseIds = json_decode($article->related_poses, true);
             //     if (!is_null($relatedPoseIds) && is_array($relatedPoseIds)) {
             //         $relatedPoses = yoga_pose::whereIn('id', $relatedPoseIds)
@@ -337,6 +322,20 @@ class ArticleController extends Controller
 
             //     return $article;
             // });
+
+            $articles = article::where('category_id', $category->id)->get()->map(function ($article) {
+                $relatedPoseIds = json_decode($article->related_poses, true);
+                if (!is_null($relatedPoseIds) && is_array($relatedPoseIds)) {
+                    $relatedPoses = yoga_pose::whereIn('id', $relatedPoseIds)
+                        ->get(['id', 'name']);
+                } else {
+                    $relatedPoses = null;
+                }
+                $article->related_yoga_poses = $relatedPoses;
+                $article->makeHidden('related_poses');
+
+                return $article;
+            });
             return response()->json([
                 'status_code' => 200,
                 'data' => $articles,
